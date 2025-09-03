@@ -31,6 +31,22 @@ dependencies:
   flutter:
     sdk: flutter
 
+  video_player: ^2.10.0
+
+  # State Management
+  provider: ^6.1.5+1
+
+  # HTTP requests & API calls
+  dio: ^5.9.0
+
+  # Store small data locally (like login tokens, user prefs)
+  shared_preferences: ^2.5.3
+
+  # Secure storage for sensitive data (like auth tokens)
+  flutter_secure_storage: ^9.2.4
+
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -57,6 +73,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/videos/welcome.mp4
+    - assets/images/backgroundimg.jpg
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
