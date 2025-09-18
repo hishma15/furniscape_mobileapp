@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
 
   // Initiates Dio for HTTP requests
   final Dio _dio = Dio(BaseOptions(
     connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 20),
   ));
   // Initiates to save sensitive data
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -38,6 +39,54 @@ class ApiService {
     }
   }
 
+  Future<bool> register({
+    // required String firstName,
+    // required String lastName,
+    required String name,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String phone,
+    required String address,
+    required String role,
+  }
+  ) async {
+    try {
+      final response =  await _dio.post(
+        '$baseUrl/register',
+        data: {
+          'name' : name,
+          'email' : email,
+          'password' : password,
+          'password_confirmation' : confirmPassword,
+          'phone_no' : phone,
+          'address' : address,
+          'role' : role,
+        },
+
+        options: Options(
+          headers: {
+            'Accept': 'application/json', // To prevent 302
+          },
+        ),
+
+      );
+
+      final token = response.data['token'];
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_token', token);
+
+      return true;
+    } catch (e) {
+      if (e is DioException && e.response != null) {
+          print('Register Error Response: ${e.response?.data}');
+        } else {
+      print('Register Error: $e');
+      }
+      return false;
+      }
+  }
 
   // Removes the token from secure storage to logout the user locally
   Future<void> logout() async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniscapemobileapp/screens/main_navigation_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:furniscapemobileapp/providers/auth_provider.dart';
@@ -7,15 +8,7 @@ import 'package:furniscapemobileapp/screens/home_screen.dart';
 import 'package:furniscapemobileapp/screens/auth/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-
-  // final VoidCallback onLoginClicked;  //TODO
-  // final VoidCallback onRegisterClicked; //TODO
-
-  const LoginScreen({
-    Key? key,
-    // required this.onRegisterClicked //TODO
-    // required this.onLoginClicked //TODO
-  }) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -57,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // Calls the login method with trimmed input from the user  [trim will remove the extra spaces at the begining and end of the string]
     final success = await authProvider.login(
       _emailController.text.trim(),
-      _passwordController.text.trim(),
+      _passwordController.text,
     );
 
     // Hides loading spinner after login attempt
@@ -68,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // On success it navigates to HomeScreen, On failure sets error message for dispaly
     if(success) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } else {
       setState(() {
@@ -91,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fit: BoxFit.cover,
               ),
           ),
-        //   Bottom Login container with opacity & rounded corners
+        //   Bottom Login container
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(

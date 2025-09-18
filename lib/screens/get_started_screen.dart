@@ -19,10 +19,10 @@ class GetStartedScreen extends StatelessWidget {
         // Optional static background color or image
         decoration: const BoxDecoration(
           color: Colors.deepPurple, // Or any fallback color
-          // image: DecorationImage(
-          //   image: AssetImage('assets/images/static_background.jpg'),
-          //   fit: BoxFit.cover,
-          // ),
+          image: DecorationImage(
+            image: AssetImage('assets/images/back.jpg'),
+            fit: BoxFit.cover,
+          ),
         ),
         padding: const EdgeInsets.all(24.0),
         child: Center(
