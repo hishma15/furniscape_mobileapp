@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
+import 'package:provider/provider.dart';
+// import 'app.dart';
+import 'package:furniscapemobileapp/providers/auth_provider.dart';
+import 'package:furniscapemobileapp/providers/home_provider.dart';
+import 'package:furniscapemobileapp/providers/explore_provider.dart';
+import 'package:furniscapemobileapp/screens/auth/login_screen.dart';
+import 'package:furniscapemobileapp/screens/get_started_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// import 'package:provider/provider.dart';
+// import 'package:furniscapemobileapp/screens/home_screen.dart';
+
+import 'theme/theme.dart';
+
 // import 'package:dio/dio.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,5 +20,41 @@ import 'app.dart';
 // import 'providers/auth_provider.dart';
 
 void main() {
-  runApp(const FurniScapeApp());
+  runApp(const MyApp());
 }
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()), // <-- This is required
+        ChangeNotifierProvider(create: (_) => ExploreProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'FurniScape',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
+        home: const GetStartedScreen(), // or LoginScreen, etc.
+        // home: const HomeScreen(),
+      ),
+    );
+  }
+}
+
+// void main() {
+//   runApp(
+//     MultiProvider(
+//       providers: [
+//         ChangeNotifierProvider(create: (_) => AuthProvider()),
+//         ChangeNotifierProvider(create: (_) => HomeProvider()),
+//       ],
+//       child: const FurniScapeApp(),
+//     ),
+//   );
+// }

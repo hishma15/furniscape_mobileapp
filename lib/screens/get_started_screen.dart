@@ -14,6 +14,8 @@ class GetStartedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
       body: Container(
         // Optional static background color or image
@@ -29,27 +31,30 @@ class GetStartedScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Welcome to \nFurniScape',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                // style: TextStyle(
+                //   fontSize: 36,
+                //   fontWeight: FontWeight.bold,
+                //   color: Colors.white,
+                // ),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: primaryColor),
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'WHERE COMFORT MEETS ELEGANCE',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white70,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: primaryColor.withOpacity(0.7),
                 ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary, // or any custom color
+                  foregroundColor: Colors.white, // text color
+                ),
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,

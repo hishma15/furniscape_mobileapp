@@ -5,6 +5,8 @@ import 'explore_screen.dart';
 import 'cart_screen.dart';
 import 'profile_screen.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -17,6 +19,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -27,11 +32,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        selectedIconTheme: const IconThemeData(color: Color(0xFF311B92), size: 40),
-        selectedItemColor: const Color(0xFF311B92),
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        unselectedIconTheme: const IconThemeData(color: Colors.deepOrangeAccent),
-        unselectedItemColor: const Color.fromARGB(255, 17, 16, 16),
+        backgroundColor: colorScheme.secondaryContainer,
+        selectedItemColor: colorScheme.onSurface,
+        unselectedItemColor: colorScheme.onSecondaryContainer,
+        selectedIconTheme: IconThemeData(color: colorScheme.onSurface, size: 30),
+        unselectedIconTheme: IconThemeData(color: colorScheme.onSecondaryContainer, size: 24),
+        selectedLabelStyle: GoogleFonts.lustria(
+          color: colorScheme.onSurface,
+          fontWeight: FontWeight.bold,
+        ),
+        unselectedLabelStyle: GoogleFonts.lustria(
+          color: colorScheme.onSecondaryContainer,
+          fontWeight: FontWeight.normal,
+        ),
         onTap: (int index) => setState(() => _currentIndex = index),
         items: [
           for (final tabItem in TabNavigationItem.items)
