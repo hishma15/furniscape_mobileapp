@@ -17,8 +17,6 @@ class AuthProvider extends ChangeNotifier {
 
   // Register Method
   Future<bool> register ({
-    // required String firstName,
-    // required String lastName,
     required String name,
     required String email,
     required String password,
@@ -28,8 +26,6 @@ class AuthProvider extends ChangeNotifier {
     // required String role,
   }) async {
     final success = await _apiService.register(
-      // firstName: firstName,
-      // lastName: lastName,
       name: name,
       email: email,
       password: password,

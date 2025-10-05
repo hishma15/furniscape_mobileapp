@@ -28,7 +28,7 @@ class Product {
       description: json['description'] ?? '',
       stock: json['no_of_stock'] ?? 0,
       isFeatured: json['is_featured'] == true || json['is_featured'] == 1,
-      categoryId: json['category_id'],
+      categoryId: json['category'] != null ? json['category']['id'] : null,
     );
   }
 

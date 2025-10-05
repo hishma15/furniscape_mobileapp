@@ -24,13 +24,19 @@ class ExploreProvider extends ChangeNotifier {
 
     try {
       _allProducts = await _apiService.fetchAllProducts();
+      print('Fetched ${_allProducts.length} products');
 
       if (categoryId == 'all') {
         _filteredProducts = _allProducts;
       } else {
+        final int? selectedCategoryId = int.tryParse(categoryId);
         _filteredProducts = _allProducts
-            .where((product) => product.categoryId.toString() == categoryId)
+            .where((product) => product.categoryId == selectedCategoryId)
             .toList();
+
+        print('Filtering for categoryId: $selectedCategoryId');
+        print('Filtered ${_filteredProducts.length} products');
+
       }
     } catch (e) {
       print('Error loading explore data: $e');

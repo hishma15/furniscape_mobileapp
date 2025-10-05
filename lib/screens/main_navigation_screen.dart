@@ -76,7 +76,7 @@ class TabNavigationItem{
       icon: const Icon(Icons.home),
     ),
     TabNavigationItem(
-      page: const ExploreScreen(),
+      page: ExploreScreen(key: UniqueKey(), categoryId: 'all'),
       title: 'Explore',
       icon: const Icon(Icons.search),
     ),
