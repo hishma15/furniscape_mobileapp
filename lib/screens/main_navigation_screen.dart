@@ -81,7 +81,7 @@ class TabNavigationItem{
       icon: const Icon(Icons.search),
     ),
     TabNavigationItem(
-      page: const CartScreen(),
+      page: CartScreen(),
       title: 'Cart',
       icon: const Icon(Icons.shopping_cart),
     ),

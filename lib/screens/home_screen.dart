@@ -10,6 +10,8 @@ import 'package:furniscapemobileapp/models/product.dart';
 
 import 'package:furniscapemobileapp/widgets/product_card.dart';
 
+import 'package:furniscapemobileapp/providers/cart_provider.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -152,7 +154,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       onAddToCart: () {
-                          Navigator.pushNamed(context, '/cart');
+                        final cartProvider = Provider.of<CartProvider>(context, listen: false);
+                        cartProvider.addItem(
+                          product.id.toString(),  // Assuming product.id is int or String
+                          product.name,
+                          product.price,
+                          product.image != null
+                              ? 'http://ec2-13-217-196-244.compute-1.amazonaws.com/storage/${product.image}'
+                              : '',  // Handle null image
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${product.name} added to cart'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       },
                     );
                   },

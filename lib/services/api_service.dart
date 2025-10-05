@@ -192,6 +192,30 @@ class ApiService {
 
   }
 
+//   Fetch user detail
+  Future<Map<String, dynamic>> fetchUserProfile() async {
+    try {
+      final token = await _getToken();
+      final response = await _dio.get(
+        '$baseUrl/profile',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        return Map<String, dynamic>.from(response.data);
+      } else {
+        throw Exception('Failed to load profile');
+      }
+    } catch (e) {
+      print('Error fetching profile: $e');
+      rethrow;
+    }
+  }
+
 }
 
 
