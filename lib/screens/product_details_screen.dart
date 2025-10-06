@@ -187,7 +187,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
         scale: _scaleAnimation,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Product Details'),
+            title: Text(
+              'Product Details',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+
+            iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
+
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: _handleBack,
@@ -213,12 +222,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 Navigator.pushNamed(context, '/cart');
               },
               style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 16),
+                textStyle: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               child: const Text('Add to Cart'),
+
             ),
           ),
           body: SingleChildScrollView(

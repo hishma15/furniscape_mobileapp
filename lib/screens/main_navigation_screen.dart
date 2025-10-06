@@ -6,6 +6,8 @@ import 'cart_screen.dart';
 import 'profile_screen.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:furniscapemobileapp/providers/explore_provider.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -16,6 +18,17 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
+
+  void _onTabChanged(int index) {
+    setState(() => _currentIndex = index);
+
+    if (index == 1) { // Explore tab index
+      // Trigger reload data
+      final exploreProvider = Provider.of<ExploreProvider>(context, listen: false);
+      exploreProvider.loadExploreData(categoryId: 'all');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +58,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           color: colorScheme.onSecondaryContainer,
           fontWeight: FontWeight.normal,
         ),
-        onTap: (int index) => setState(() => _currentIndex = index),
+        onTap: _onTabChanged,
+        // onTap: (int index) => setState(() => _currentIndex = index),
         items: [
           for (final tabItem in TabNavigationItem.items)
             BottomNavigationBarItem(
@@ -76,7 +90,7 @@ class TabNavigationItem{
       icon: const Icon(Icons.home),
     ),
     TabNavigationItem(
-      page: ExploreScreen(key: UniqueKey(), categoryId: 'all'),
+      page: const ExploreScreen(key: ValueKey('ExploreScreen'), category: null),
       title: 'Explore',
       icon: const Icon(Icons.search),
     ),
@@ -86,12 +100,7 @@ class TabNavigationItem{
       icon: const Icon(Icons.shopping_cart),
     ),
     TabNavigationItem(
-      page: ProfileScreen(
-        // onLogOutClick: () {
-        //   // TODO: logout logic
-        //   print("Logout clicked");
-        // },
-      ),
+      page: ProfileScreen(),
       title: 'Profile',
       icon: const Icon(Icons.person),
     ),

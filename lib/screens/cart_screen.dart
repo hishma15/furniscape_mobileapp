@@ -3,157 +3,201 @@ import 'package:provider/provider.dart';
 
 import 'package:furniscapemobileapp/models/cartitem.dart';
 import 'package:furniscapemobileapp/providers/cart_provider.dart';
-
 import 'package:furniscapemobileapp/services/location_service.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:furniscapemobileapp/screens/favorites_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CartScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Cart'),
-
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Expanded(
-              child: cart.items.isEmpty
-                  ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                      //   Image
-                        Image.asset('assets/images/emptycart.jpg',
-                          width: 180,
-                          height: 180,
-                          fit: BoxFit.contain,
-                        ),
-                        SizedBox(height: 20,),
-                      //   Text
-                        Text('Your cart is Empty!',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        SizedBox(height: 8,),
-                        Text('Looks like you haven\'t added anything yet.',
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.6),
-                          ),
-                        )
-                      ],
-                    )
-                  )
-                  : ListView.separated(
-                    itemBuilder: (ctx, index) {
-                      var cartItem = cart.items.values.toList()[index];
-                      return CartItemWidget(cartItem: cartItem);
-                    },
-                    separatorBuilder: (_, __) => SizedBox(height: 12,),
-                    itemCount: cart.items.length
-                  ),
-              ),
-          SizedBox(height: 20,),
-          PriceSummarySection(
-            subtotal: cart.subTotal,
-            delivery: cart.deliveryFee,
-            tax: cart.tax,
+        title: Text(
+          'FurniScape',
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
-          SizedBox(height: 20,),
-          // SizedBox(
-          //   width: double.infinity,
-          //   child: ElevatedButton(
-          //       onPressed: cart.items.isEmpty
-          //           ? null
-          //           : () {
-          //       //   Simulate checkout
-          //         showDialog(
-          //             context: context,
-          //             builder: (_) => AlertDialog(
-          //               title: Text('Order placed!'),
-          //               content: Text(
-          //                 'Total paid: Rs. ${cart.totalAmount.toStringAsFixed(0)}'
-          //               ),
-          //               actions: [
-          //                 TextButton(
-          //                     onPressed: () {
-          //                       cart.clear();
-          //                       Navigator.of(context).pop();
-          //                     },
-          //                   child: Text('OK'),
-          //                 )
-          //               ],
-          //             )
-          //         );
-          //       },
-          //     style: ElevatedButton
-          //         .styleFrom(
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(12),
-          //       ),
-          //       padding: EdgeInsets.symmetric(vertical: 16),
-          //     ),
-          //     child: Text('Proceed to checkout'),
-          //   ),
-          // )
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: cart.items.isEmpty
-                  ? null
-                  : () async {
-                Position position;
-                String address = '';
-
-                try {
-                  position = await LocationService.determinePosition();
-                  address = await LocationService.getAddressFromLatLng(
-                    position.latitude,
-                    position.longitude,
-                  );
-                } catch (e) {
-                  address = 'Location unavailable';
-                }
-
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('Order placed!'),
-                    content: Text(
-                      'Total paid: Rs. ${cart.totalAmount.toStringAsFixed(0)}\n\n'
-                          'Delivery Address:\n$address',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          cart.clear();
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('OK'),
-                      )
-                    ],
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: Text('Proceed to checkout'),
-            ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {},
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FavoritesScreen()),
+              );
+            },
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ],
-      ),),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth > 600;
+          final cart = Provider.of<CartProvider>(context);
+
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'My Cart',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // List or empty message inside a ConstrainedBox with max height
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: constraints.maxHeight * 0.6, // 60% of available height
+                      ),
+                      child: cart.items.isEmpty
+                          ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/emptycart.jpg',
+                              width: 180,
+                              height: 180,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'Your cart is Empty!',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Looks like you haven\'t added anything yet.',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                          : isWide
+                          ? GridView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: cart.items.length,
+                        gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 3.5,
+                        ),
+                        itemBuilder: (context, index) {
+                          var cartItem = cart.items.values.toList()[index];
+                          return CartItemWidget(cartItem: cartItem);
+                        },
+                      )
+                          : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: cart.items.length,
+                        itemBuilder: (ctx, index) {
+                          var cartItem = cart.items.values.toList()[index];
+                          return CartItemWidget(cartItem: cartItem);
+                        },
+                        separatorBuilder: (_, __) =>
+                        const SizedBox(height: 12),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    PriceSummarySection(
+                      subtotal: cart.subTotal,
+                      delivery: cart.deliveryFee,
+                      tax: cart.tax,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: cart.items.isEmpty
+                            ? null
+                            : () async {
+                          Position position;
+                          String address = '';
+
+                          try {
+                            position = await LocationService.determinePosition();
+                            address = await LocationService.getAddressFromLatLng(
+                              position.latitude,
+                              position.longitude,
+                            );
+                          } catch (e) {
+                            address = 'Location unavailable';
+                          }
+
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text('Order placed!'),
+                              content: Text(
+                                'Total paid: Rs. ${cart.totalAmount.toStringAsFixed(0)}\n\n'
+                                    'Delivery Address:\n$address',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    cart.clear();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        child: Text('Proceed to checkout',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -165,7 +209,7 @@ class CartItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context, listen: false);
-    
+
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -174,7 +218,7 @@ class CartItemWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-        //   Image 
+          //   Image
           SizedBox(
             width: 50,
             height: 50,
@@ -186,7 +230,7 @@ class CartItemWidget extends StatelessWidget {
           ),
           SizedBox(width: 12,),
 
-        //   Title and price
+          //   Title and price
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,14 +242,14 @@ class CartItemWidget extends StatelessWidget {
                   'Rs. ${cartItem.price.toStringAsFixed(0)}',
                   style: TextStyle(
                     color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                    Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                   ),
                 )
               ],
             ),
           ),
 
-        //   Quantity controls  and delete
+          //   Quantity controls  and delete
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -219,8 +263,14 @@ class CartItemWidget extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size(36, 30),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      child: Text('-'),
+                      child: Text('-',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
@@ -234,13 +284,20 @@ class CartItemWidget extends StatelessWidget {
                     width: 36,
                     height: 30,
                     child: ElevatedButton(
-                      onPressed: () => cart.increaseQuantity(cartItem.productId),
+                      onPressed: () => cart.decreaseQuantity(cartItem.productId),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size(36, 30),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      child: Text('+'),
+                      child: Text('+',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
+
                   ),
                 ],
               ),
@@ -322,15 +379,3 @@ class PriceSummarySection extends StatelessWidget {
     );
   }
 }
-
-// class CartScreen extends StatelessWidget {
-//   const CartScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Cart'),),
-//       body: const Center(child: Text('Cart Screen'),),
-//     );
-//   }
-// }

@@ -87,41 +87,39 @@ class _LoginScreenState extends State<LoginScreen> {
         //   Bottom Login container
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.secondary.withOpacity(0.6),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(32),
-                  topRight: Radius.circular(32),
+            child: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.secondary.withOpacity(0.6),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(32),
+                    topRight: Radius.circular(32),
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(24),
-              height: MediaQuery.of(context).size.height * 0.5,
-              width: double.infinity,
-              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                width: double.infinity,
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'LOGIN',
                         style: theme.textTheme.headlineLarge?.copyWith(
-                          fontWeight:  FontWeight.bold,
+                          fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSecondary,
-                      ),
-                      ),
-                      const SizedBox(height: 24,),
-
-                      // Displays error message if error occured
-                      if (_errorMessage != null)
-                        Text(_errorMessage!,
-                        style: const TextStyle(color: Colors.red),
                         ),
-
-                      const SizedBox(height: 16,),
-
-                    //   Email Text Field
+                      ),
+                      const SizedBox(height: 24),
+                      if (_errorMessage != null)
+                        Text(
+                          _errorMessage!,
+                          style: const TextStyle(
+                              color: Colors.red,
+                            fontWeight: FontWeight.w400
+                          ),
+                        ),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -135,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty){
+                          if (value == null || value.trim().isEmpty) {
                             return 'Please enter your email';
                           }
                           if (!value.contains('@')) {
@@ -144,10 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-
-                      const SizedBox(height: 16,),
-
-                      //   Password Text Field with visibility toggle
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: !_passwordVisible,
@@ -161,10 +156,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                                _passwordVisible
-                                    ?Icons.visibility
-                                    :Icons.visibility_off,
-                                color: theme.colorScheme.primary,
+                              _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                              color: theme.colorScheme.primary,
                             ),
                             onPressed: () {
                               setState(() {
@@ -177,33 +170,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Enter password';
                           }
-                          if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
+                          if (value.length < 8) {
+                            return 'Password must be at least 8 characters';
                           }
                           return null;
                         },
                       ),
-
-                      const SizedBox(height: 20,),
-
-                    //   Login Button
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                            // onPressed: widget.onLoginClicked,
-                            onPressed: _isLoading ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              backgroundColor:  theme.colorScheme.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
+                          onPressed: _isLoading ? null : _submit,
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32),
                             ),
+                            backgroundColor: theme.colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
                           child: _isLoading
-                              ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                            : Text(
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : Text(
                             'Login',
                             style: TextStyle(
                               color: theme.colorScheme.onPrimary,
@@ -212,25 +199,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-
                       ),
-
-                      const SizedBox(height: 8,),
-
-                    //   Register Text Button
+                      const SizedBox(height: 8),
                       TextButton(
-                        // onPressed: widget.onRegisterClicked,
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const RegisterScreen(),
-                            ),
+                            MaterialPageRoute(builder: (_) => const RegisterScreen()),
                           );
                         },
-                      child: RichText(
+                        child: RichText(
                           text: TextSpan(
-                            text: "Don't have an account?",
-                            style:  TextStyle(
+                            text: "Don't have an account? ",
+                            style: TextStyle(
                               color: theme.colorScheme.onSecondary,
                               fontSize: 14,
                             ),
@@ -241,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.w300,
                                   color: theme.colorScheme.onSecondary,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -251,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

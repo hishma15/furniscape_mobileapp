@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
-              // TODO: Handle notification click
+              // Handles notification click
             },
             color: Theme.of(context).colorScheme.onPrimary,
           ),
@@ -159,14 +159,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 16,),
                       // Banner
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.asset(
                             'assets/images/homeimg.png',
                             width: double.infinity,
-                            height: 160,
-                            fit: BoxFit.cover,
+                            // height: 160,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                       ),
@@ -176,8 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Categories
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text('Categories', style: Theme.of(context).textTheme.headlineLarge,)
+                          child: Text('SHOP BY ROOM', style: Theme.of(context).textTheme.headlineLarge,)
                       ),
+                      const SizedBox(height: 12,),
                       SizedBox(
                         height: 130,
                         child: ListView.builder(
@@ -250,53 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// Category Card UI
-// class CategoryCard extends StatelessWidget {
-//   final Category category;
-//
-//   const CategoryCard({super.key, required this.category});
-//
-//   static const String backendUrl = 'http://ec2-13-217-196-244.compute-1.amazonaws.com';
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: 100,
-//       margin: const EdgeInsets.all(8),
-//       child: Column(
-//         children: [
-//           Container(
-//             width: 60,
-//             height: 60,
-//             child: category.image != null
-//                 ? Builder(
-//               builder: (_) {
-//                 final imageUrl = '$backendUrl/storage/${category.image!}';
-//                 print('Loading image from: $imageUrl'); // ← This is the line
-//                 return Image.network(
-//                   imageUrl,
-//                   errorBuilder: (context, error, stackTrace) {
-//                     return const Icon(Icons.error);
-//                   },
-//                   fit: BoxFit.cover,
-//                 );
-//               },
-//             )
-//                 : Image.asset('assets/images/back.jpg'),
-//           ),
-//
-//           const SizedBox(height: 8),
-//           Text(
-//             category.name,
-//             textAlign: TextAlign.center,
-//             style: const TextStyle(fontSize: 14),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class CategoryCard extends StatelessWidget {
   final Category category;
   static const String backendUrl =
@@ -316,7 +270,7 @@ class CategoryCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ExploreScreen(categoryId: category.id.toString()),
+            builder: (context) => ExploreScreen(category: category),
           ),
         );
       },
@@ -326,8 +280,8 @@ class CategoryCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              width: 60,
-              height: 60,
+              width: 80,
+              height: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.grey.shade200,

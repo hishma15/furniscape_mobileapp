@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 
 import 'package:furniscapemobileapp/screens/auth/login_screen.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter/material.dart';
 import 'package:furniscapemobileapp/screens/auth/login_screen.dart';
@@ -39,21 +40,24 @@ class GetStartedScreen extends StatelessWidget {
                 //   fontWeight: FontWeight.bold,
                 //   color: Colors.white,
                 // ),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: primaryColor),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    color: Colors.black, 
+                    fontWeight: FontWeight.bold
+                ),
               ),
               const SizedBox(height: 12),
               Text(
                 'WHERE COMFORT MEETS ELEGANCE',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: primaryColor.withOpacity(0.7),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.black.withOpacity(0.8),
                 ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary, // or any custom color
-                  foregroundColor: Colors.white, // text color
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary, // text color
                 ),
                 onPressed: () {
                   Navigator.pushReplacement(
@@ -65,7 +69,13 @@ class GetStartedScreen extends StatelessWidget {
                       ),
                   );
                 },
-                child: const Text('Get Started'),
+                child: Text(
+                  'GET STARTED',
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ],
           ),
