@@ -20,6 +20,7 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    print('Parsing product: $json');
     return Product(
       id:  json['id'],
       name: json['product_name'],
@@ -27,8 +28,12 @@ class Product {
       price: double.tryParse(json['price'].toString()) ?? 0.0,
       description: json['description'] ?? '',
       stock: json['no_of_stock'] ?? 0,
-      isFeatured: json['is_featured'] == true || json['is_featured'] == 1,
-      categoryId: json['category'] != null ? json['category']['id'] : null,
+      // isFeatured: json['is_featured'] == true || json['is_featured'] == 1,
+      isFeatured: json['is_featured'] != null
+          ? (json['is_featured'] == true || json['is_featured'] == 1)
+          : false,
+      // categoryId: json['category'] != null ? json['category']['id'] : null,
+      categoryId: json['category']?['id'],
     );
   }
 

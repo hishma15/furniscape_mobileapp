@@ -51,6 +51,16 @@ class ApiService {
       if (response.statusCode == 200 && response.data['token'] != null) {
       //   Save the token Securely
         await _storage.write(key: 'token', value: response.data['token']);
+
+        //Save user email and name [to fetch in profile page]
+        final user = response.data['user'];
+        if (user != null) {
+          if (user['name'] != null) {
+            await _storage.write(key: 'name', value: user['name']);
+          }
+          await _storage.write(key: 'email', value: user['email']);
+        }
+
         print('Login successful, token saved.');
         return true;
       }else{
@@ -123,8 +133,11 @@ class ApiService {
   // Removes the token from secure storage to logout the user locally
   Future<void> logout() async {
     await _storage.delete(key: 'token');
-    print('User logged out, token removed.');
+    await _storage.delete(key: 'name');
+    await _storage.delete(key: 'email');
+    print('User logged out, all secure data removed.');
   }
+
 
   // // Reads abd returns the stored token.
   // Future<String?> getToken() async {
@@ -192,29 +205,13 @@ class ApiService {
 
   }
 
-//   Fetch user detail
-  Future<Map<String, dynamic>> fetchUserProfile() async {
-    try {
-      final token = await _getToken();
-      final response = await _dio.get(
-        '$baseUrl/profile',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
-      );
-      if (response.statusCode == 200) {
-        return Map<String, dynamic>.from(response.data);
-      } else {
-        throw Exception('Failed to load profile');
-      }
-    } catch (e) {
-      print('Error fetching profile: $e');
-      rethrow;
-    }
+  // Get username and email from secure storage
+  Future<Map<String, String>> getUserInfo() async {
+    final name = await _storage.read(key: 'name') ?? '';
+    final email = await _storage.read(key: 'email') ?? '';
+    return {'name': name, 'email': email};
   }
+
 
 }
 

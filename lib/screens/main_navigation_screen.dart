@@ -86,7 +86,12 @@ class TabNavigationItem{
       icon: const Icon(Icons.shopping_cart),
     ),
     TabNavigationItem(
-      page: const ProfileScreen(),
+      page: ProfileScreen(
+        // onLogOutClick: () {
+        //   // TODO: logout logic
+        //   print("Logout clicked");
+        // },
+      ),
       title: 'Profile',
       icon: const Icon(Icons.person),
     ),

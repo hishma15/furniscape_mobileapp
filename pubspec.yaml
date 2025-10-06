@@ -64,6 +64,16 @@ dependencies:
   # Provides eay geocoding and reverse geocoding
   geocoding: ^4.0.0
 
+  # Discover the state of the network connectivity
+#  connectivity_plus: ^7.0.0
+  connectivity_plus: ^6.1.5
+
+  # checks Internet connectivity
+  internet_connection_checker: ^3.0.1
+
+  #For Camera sensor
+  image_picker: ^1.2.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -93,12 +103,10 @@ flutter:
   assets:
     - assets/videos/welcome.mp4
     - assets/images/
+    - assets/json/products_offline.json
     #- assets/images/backgroundimg.jpg
     #- assets/images/back.jpg
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -3,6 +3,9 @@ import 'package:furniscapemobileapp/models/product.dart';
 import 'package:furniscapemobileapp/models/product.dart';
 import 'package:furniscapemobileapp/services/api_service.dart';
 
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+
 class ExploreProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
 
@@ -16,15 +19,18 @@ class ExploreProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get currentCategoryId => _currentCategoryId;
 
+  bool _isOffline = false;
+  bool get isOffline => _isOffline;
+
   // Fetch data and filter based on category
   Future<void>loadExploreData({String categoryId = 'all'}) async {
     _isLoading = true;
     _currentCategoryId = categoryId;
+    _isOffline = false;
     notifyListeners();
 
     try {
       _allProducts = await _apiService.fetchAllProducts();
-      print('Fetched ${_allProducts.length} products');
 
       if (categoryId == 'all') {
         _filteredProducts = _allProducts;
@@ -41,6 +47,7 @@ class ExploreProvider extends ChangeNotifier {
     } catch (e) {
       print('Error loading explore data: $e');
       _filteredProducts = [];
+      _isOffline = true;
     }
 
     _isLoading = false;
@@ -59,6 +66,28 @@ class ExploreProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // To fetch the offline products
+  Future<void> loadOfflineProducts() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final jsonString = await rootBundle.loadString('assets/json/products_offline.json');
+      final List<dynamic> jsonResponse = json.decode(jsonString);
+
+      _allProducts = jsonResponse.map((json) => Product.fromJson(json)).toList();
+      _filteredProducts = _allProducts;
+      print('Loaded ${_allProducts.length} offline products');
+    } catch (e) {
+      print('Error loading offline products: $e');
+      _filteredProducts = [];
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
 
 
 }

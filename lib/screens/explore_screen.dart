@@ -7,6 +7,8 @@ import 'package:furniscapemobileapp/screens/product_details_screen.dart';
 import 'package:furniscapemobileapp/widgets/product_card.dart';
 import 'package:furniscapemobileapp/providers/cart_provider.dart';
 
+import 'package:furniscapemobileapp/screens/offline_products_screen.dart';
+
 class ExploreScreen extends StatefulWidget {
   final String categoryId;
 
@@ -36,6 +38,49 @@ class _ExploreScreenState extends State<ExploreScreen> {
         if (provider.isLoading) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (provider.isOffline) {
+          // Show offline message + button
+          return Scaffold(
+            appBar: widget.categoryId == 'all'
+                ? AppBar(title: const Text('Explore'))
+                : AppBar(
+              title: Text(widget.categoryId[0].toUpperCase() + widget.categoryId.substring(1)),
+              leading: BackButton(onPressed: () => Navigator.pop(context)),
+            ),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.signal_wifi_off, size: 60, color: Colors.red),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'You are offline',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Unable to fetch data from the server.',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => OfflineProductsScreen()),
+                        );
+                      },
+                      child: const Text('View Our Offline Products'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         }
 
@@ -123,7 +168,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 }
-
 
 
 // class ExploreScreen extends StatelessWidget {

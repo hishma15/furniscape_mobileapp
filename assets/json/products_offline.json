@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "product_name": "Offline Chair",
+    "product_image": null,
+    "price": 3000.00,
+    "description": "A comfy chair",
+    "no_of_stock": 12,
+    "category": { "id": 2 }
+  },
+  {
+    "id": 2,
+    "product_name": "Shadowline Wardrobe",
+    "product_image": null,
+    "price": 3000.00,
+    "description": "A sleek wardrobe with plenty of space for your clothes and accessories.",
+    "no_of_stock": 12,
+    "category": { "id": 1 }
+  },
+  {
+    "id": 3,
+    "product_name": "MapleCrest 3-Seater",
+    "product_image": null,
+    "price": 3500.00,
+    "description": "A spacious three-seater sofa made with soft fabric and sturdy build.",
+    "no_of_stock": 12,
+    "category": { "id": 2 }
+  },
+  {
+    "id": 4,
+    "product_name": "TerraForge Coffee Table",
+    "product_image": null,
+    "price": 2000.00,
+    "description": "A strong and stylish coffee table perfect for any living room.",
+    "no_of_stock": 9,
+    "category": { "id": 2 }
+  },
+  {
+    "id": 5,
+    "product_name": "Soft Seat",
+    "product_image": null,
+    "price": 1080.00,
+    "description": "A soft and cozy seat, great for relaxing anytime.",
+    "no_of_stock": 12,
+    "category": { "id": 2 }
+  },{
+  "id": 6,
+  "product_name": "Double Bed",
+  "product_image": null,
+  "price": 8000.00,
+  "description": "AA comfortable double bed with a strong wooden frame",
+  "no_of_stock": 12,
+  "category": { "id": 1 }
+  },
+  {
+    "id": 7,
+    "product_name": "Bookshelf",
+    "product_image": null,
+    "price": 4560.00,
+    "description": "A book shelf with multiple shelves to stoere your books and decor",
+    "no_of_stock": 12,
+    "category": { "id": 2 }
+  },
+  {
+    "id": 8,
+    "product_name": "TV Stand",
+    "product_image": null,
+    "price": 9600.00,
+    "description": "A TV stand with storage space for media devices.",
+    "no_of_stock": 12,
+    "category": { "id": 2 }
+  },
+  {
+    "id": 9,
+    "product_name": "Storage Box",
+    "product_image": null,
+    "price": 5100.00,
+    "description": "A compact and handy storage box to keep your things organized.",
+    "no_of_stock": 12,
+    "category": { "id": 4 }
+  },
+  {
+    "id": 10,
+    "product_name": "Office Chair",
+    "product_image": null,
+    "price": 3000.00,
+    "description": "A comfortable office chair with adjustable height and back support.",
+    "no_of_stock": 12,
+    "category": { "id": 5 }
+  }
+
+]
