@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-
-import 'package:furniscapemobileapp/main.dart';
 import 'package:furniscapemobileapp/models/product.dart';
-
 import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:contacts_service_plus/contacts_service_plus.dart';
-
 import 'package:flutter/services.dart';
-
+import 'package:provider/provider.dart';
+import 'package:furniscapemobileapp/providers/liked_products_provider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -21,8 +17,6 @@ class ProductDetailsScreen extends StatefulWidget {
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-
-
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
@@ -30,13 +24,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   late Animation<double> _scaleAnimation;
 
   int quantity = 1;
-  bool isLiked = false;
 
   @override
   void initState() {
     super.initState();
-
-    // Animation controller for fade and scale animations
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 400),
       vsync: this,
@@ -44,7 +35,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
 
     _fadeAnimation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(_fadeAnimation);
+    _scaleAnimation =
+        Tween<double>(begin: 0.8, end: 1.0).animate(_fadeAnimation);
 
     _animationController.forward();
   }
@@ -57,14 +49,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
 
   Future<void> _handleBack() async {
     await _animationController.reverse();
-    if (widget.onBack != null) widget.onBack!();
+    widget.onBack?.call();
     Navigator.of(context).pop();
   }
 
   Future<void> _shareWithContact() async {
-  //   Request permission
     var status = await Permission.contacts.status;
-
     if (!status.isGranted) {
       status = await Permission.contacts.request();
       if (!status.isGranted) {
@@ -75,10 +65,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       }
     }
 
-  //   Fetch contacts
-    Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
+    Iterable<Contact> contacts =
+    await ContactsService.getContacts(withThumbnails: false);
 
-  //   Show contacts in bottom sheet
+    final filteredContacts = contacts
+        .where((c) => c.displayName != null && c.phones!.isNotEmpty)
+        .toList();
+
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -86,18 +79,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       ),
       isScrollControlled: true,
       builder: (context) {
-        if (contacts.isEmpty) {
+        if (filteredContacts.isEmpty) {
           return Container(
             height: 150,
             alignment: Alignment.center,
             child: Text('No contact found'),
           );
         }
-
-        // Filter contacts with name and phone
-        final filteredContacts = contacts
-            .where((c) => c.displayName != null && c.phones!.isNotEmpty)
-            .toList();
 
         return DraggableScrollableSheet(
           expand: false,
@@ -108,7 +96,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header/title with padding and styling
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
@@ -139,7 +126,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                         subtitle: Text(phone),
                         onTap: () {
                           Navigator.pop(context);
-                          _showShareConfirmation(contact.displayName ?? '', phone);
+                          _showShareConfirmation(
+                              contact.displayName ?? '', phone);
                         },
                       );
                     },
@@ -151,14 +139,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
         );
       },
     );
-
-
   }
 
   void _showShareConfirmation(String contactName, String phone) {
     final productName = widget.product.name;
-    final Url = 'http://ec2-13-217-196-244.compute-1.amazonaws.com'; //  URL
-    final message = 'Check out this $productName I found on FurnisCape! See more here: $Url';
+    final url = 'http://ec2-13-217-196-244.compute-1.amazonaws.com';
+    final message =
+        'Check out this $productName I found on FurnisCape! See more here: $url';
 
     showDialog(
       context: context,
@@ -183,45 +170,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
         ],
       ),
     );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('You prepared to share $productName details with $contactName.')),
-    );
   }
-
-  // void _showShareConfirmation(String contactName, String phone) {
-  //   final productName = widget.product.name;
-  //   final message = 'Check out this $productName I found on FurnisCape!';
-  //
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(content: Text('You shared $productName details with $contactName.')),
-  //   );
-  //
-  //   // Optional: open SMS app with prefilled message
-  //   _launchSMS(phone, message);
-  // }
-  //
-  // void _launchSMS(String phoneNumber, String message) async {
-  //   final Uri smsUri = Uri(
-  //     scheme: 'sms',
-  //     path: phoneNumber,
-  //     queryParameters: {'body': message},
-  //   );
-  //
-  //   if (await canLaunchUrl(smsUri)) {
-  //     await launchUrl(smsUri);
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Could not open SMS app')),
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
+    final likedProvider = Provider.of<LikedProductsProvider>(context);
+    final isLiked = likedProvider.isLiked(product.id);
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -237,12 +195,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             actions: [
               IconButton(
                 icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
-                onPressed: () => setState(() => isLiked = !isLiked),
+                onPressed: () {
+                  likedProvider.toggleLike(product.id);
+                },
                 color: isLiked ? Colors.red : Colors.white,
               ),
               IconButton(
                 icon: const Icon(Icons.share),
-                onPressed: _shareWithContact,  // call the method here
+                onPressed: _shareWithContact,
               ),
             ],
           ),
@@ -258,9 +218,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-
               child: const Text('Add to Cart'),
-
             ),
           ),
           body: SingleChildScrollView(
@@ -269,13 +227,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ? Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _productImage(product),
-                ),
+                Expanded(child: _productImage(product)),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: _productDetails(product),
-                ),
+                Expanded(child: _productDetails(product)),
               ],
             )
                 : Column(
@@ -335,43 +289,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             ),
             Row(
               children: [
-                // Minus button
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor, // Primary color background
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.remove),
-                    color: Colors.white, // icon color white for contrast
-                    onPressed: () {
-                      if (quantity > 1) setState(() => quantity--);
-                    },
-                  ),
-                ),
+                _quantityButton(Icons.remove, () {
+                  if (quantity > 1) setState(() => quantity--);
+                }),
                 const SizedBox(width: 8),
-                Text(
-                  quantity.toString(),
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                Text(quantity.toString(),
+                    style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(width: 8),
-                // Plus button
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor, // Primary color background
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.add),
-                    color: Colors.white, // icon color white for contrast
-                    onPressed: () {
-                      setState(() => quantity++);
-                    },
-                  ),
-                ),
+                _quantityButton(Icons.add, () {
+                  setState(() => quantity++);
+                }),
               ],
             ),
-
           ],
         ),
         const SizedBox(height: 16),
@@ -387,6 +316,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
+    );
+  }
+
+  Widget _quantityButton(IconData icon, VoidCallback onPressed) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: IconButton(
+        icon: Icon(icon),
+        color: Colors.white,
+        onPressed: onPressed,
+      ),
     );
   }
 }

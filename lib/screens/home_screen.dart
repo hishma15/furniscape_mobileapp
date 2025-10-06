@@ -14,6 +14,7 @@ import 'dart:async';
 
 import 'package:furniscapemobileapp/widgets/product_card.dart';
 import 'package:furniscapemobileapp/providers/cart_provider.dart';
+import 'package:furniscapemobileapp/screens/favorites_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,7 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () {
-              // TODO: Handle favorite/like click
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FavoritesScreen()),
+              );
+
             },
             color: Theme.of(context).colorScheme.onPrimary,
           ),

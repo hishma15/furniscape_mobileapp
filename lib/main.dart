@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniscapemobileapp/providers/cart_provider.dart';
+import 'package:furniscapemobileapp/providers/liked_products_provider.dart';
 import 'package:provider/provider.dart';
 // import 'app.dart';
 import 'package:furniscapemobileapp/providers/auth_provider.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ExploreProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => LikedProductsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
