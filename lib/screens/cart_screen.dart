@@ -284,7 +284,7 @@ class CartItemWidget extends StatelessWidget {
                     width: 36,
                     height: 30,
                     child: ElevatedButton(
-                      onPressed: () => cart.decreaseQuantity(cartItem.productId),
+                      onPressed: () => cart.increaseQuantity(cartItem.productId),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size(36, 30),

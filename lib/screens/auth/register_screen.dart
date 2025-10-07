@@ -127,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _buildTextField(
                         _phoneController,
                         'Phone Number',
-                        inputType: TextInputType.phone,
+                        inputType: TextInputType.number,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         isPhone: true,
                       ),
