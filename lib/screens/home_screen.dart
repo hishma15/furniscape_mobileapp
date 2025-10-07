@@ -15,6 +15,8 @@ import 'dart:async';
 import 'package:furniscapemobileapp/widgets/product_card.dart';
 import 'package:furniscapemobileapp/providers/cart_provider.dart';
 import 'package:furniscapemobileapp/screens/favorites_screen.dart';
+import 'package:furniscapemobileapp/screens/notification_screen.dart';
+import 'package:furniscapemobileapp/providers/notification_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -67,6 +69,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+
+  void _openNotificationsScreen(BuildContext context) async {
+    final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+    await notificationProvider.fetchNotifications();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
@@ -84,9 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Handles notification click
-            },
+            onPressed: () => _openNotificationsScreen(context),
             color: Theme.of(context).colorScheme.onPrimary,
           ),
           IconButton(

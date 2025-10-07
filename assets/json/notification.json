@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Welcome to FurniScape!",
+    "body": "Thanks for joining us. Explore the latest furniture collections now.",
+    "date": "2025-10-01T10:00:00Z",
+    "imageUrl": null
+  },
+  {
+    "id": 2,
+    "title": "Flash Sale Today!",
+    "body": "Get up to 50% off on selected sofas and chairs. Limited time offer!",
+    "date": "2025-10-05T12:00:00Z",
+    "imageUrl": null
+  },
+  {
+    "id": 3,
+    "title": "New Arrivals",
+    "body": "Check out our new modern dining tables just added to the collection.",
+    "date": "2025-10-07T09:00:00Z",
+    "imageUrl": null
+  },
+  {
+    "id": 4,
+    "title": "Free Shipping Weekend",
+    "body": "Enjoy free shipping on all orders over Rs. 100 this weekend only!",
+    "date": "2025-10-10T00:00:00Z",
+    "imageUrl": null
+  },
+  {
+    "id": 5,
+    "title": "Tips for Your Home",
+    "body": "Discover how to style your living room with our latest blog post.",
+    "date": "2025-10-12T15:00:00Z",
+    "imageUrl": null
+  }
+]
